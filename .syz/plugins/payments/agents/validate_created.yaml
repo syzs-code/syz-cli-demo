@@ -1,0 +1,35 @@
+name: payments.validate_created
+type: validate
+description: "Order created — 201, well-formed orderId, known currency, schema-valid body"
+checks:
+  - type: http
+    description: "HTTP status is 201"
+    path: "$.fields.status_code"
+    operator: equals
+    value: 201
+  - type: json
+    description: "orderId is present"
+    path: "$.fields.body.orderId"
+    operator: exists
+  - type: json
+    description: "orderId looks like ord_<n>"
+    path: "$.fields.body.orderId"
+    operator: matches
+    value: "^ord_[0-9]+$"
+  - type: json
+    description: "currency is one of the supported set"
+    path: "$.fields.body.currency"
+    operator: in
+    value: ["USD", "EUR", "GBP"]
+  - type: json
+    description: "response body matches the order schema"
+    path: "$.fields.body"
+    operator: matches_schema
+    value:
+      type: object
+      required: [orderId, amount, currency, status]
+      properties:
+        orderId:  { type: string }
+        amount:   { type: number }
+        currency: { type: string }
+        status:   { type: string }

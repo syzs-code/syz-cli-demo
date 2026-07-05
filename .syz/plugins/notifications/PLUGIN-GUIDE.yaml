@@ -1,0 +1,22 @@
+# PLUGIN-GUIDE.yaml — notifications integration knowledge (L2)
+#
+# Requirement ids are REQ-NOTIFICATIONS-PG-<NNN>.
+
+summary: >
+  Sends a customer notification about an order over a chosen channel.
+
+requirements:
+  - id: REQ-NOTIFICATIONS-PG-001
+    summary: Send a notification
+    behaviour:
+      given: an order id and a supported channel
+      when:  a notification is sent
+      then:  the notification is accepted and marked as sent
+    inputs:
+      - { field: orderId, type: string, required: true }
+      - { field: channel, type: string, values: [email, sms], required: true }
+    rules:
+      - channel must be one of email, sms
+    notes: >
+      A thin second integration so the workspace has a genuine cross-service journey: a payment
+      is made in one integration, and the customer is notified through this one.

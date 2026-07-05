@@ -1,0 +1,19 @@
+name: payments.validate_refunded
+type: validate
+description: "Refund accepted — HTTP 201 and status 'refunded'"
+checks:
+  - type: http
+    description: "HTTP status is 201"
+    path: "$.fields.status_code"
+    operator: equals
+    value: 201
+  - type: json
+    description: "refundId looks like rfnd_<n>"
+    path: "$.fields.body.refundId"
+    operator: matches
+    value: "^rfnd_[0-9]+$"
+  - type: json
+    description: "status equals 'refunded'"
+    path: "$.fields.body.status"
+    operator: equals
+    value: refunded

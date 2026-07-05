@@ -1,0 +1,27 @@
+# Demonstrates `syz run --continue-scenario-on-failure`.
+#
+# The first validate FAILS ON PURPOSE (it asserts an impossible status). Run this scenario
+# WITHOUT the flag and the scenario stops at the failed check; run it WITH the flag and the
+# runner continues to the second (passing) validate. This scenario is expected to end as a
+# failure either way — it is intentionally excluded from the smoke suite.
+#
+#   syz run --suite .syz/scenarios/demos/continue_on_failure.yaml --env local
+#   syz run --suite .syz/scenarios/demos/continue_on_failure.yaml --env local --continue-scenario-on-failure
+name: "Demo — continue on failure"
+level: e2e
+environment: local
+tags: [demo]
+plugins:
+  - { name: payments, version: "1.0.0" }
+flow:
+  - type: send
+    agent: payments.create_order
+    inputs: { amount: 100, currency: USD, userId: user-1 }
+  - type: validate
+    agent: payments.validate_fetched          # asserts HTTP 200 — but create returns 201, so this FAILS
+    inputs:
+      response: "{{ ledger.payments.create_order.http.response }}"
+  - type: validate
+    agent: payments.validate_created          # this one passes — only reached with the flag
+    inputs:
+      response: "{{ ledger.payments.create_order.http.response }}"

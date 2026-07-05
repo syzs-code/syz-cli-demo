@@ -1,0 +1,23 @@
+name: payments.refund_order
+type: send
+execution_library: http
+description: >
+  Refund an order. Carries only the operation + base_url; the bearer token is
+  supplied by the `payments_api` connection handle when a step attaches it.
+connection:
+  execution_library: http
+  lifecycle: ephemeral
+  http:
+    request:
+      fields:
+        base_url: "{{ env.payments.base_url }}"
+http:
+  request:
+    fields:
+      method: POST
+      path: /refunds
+      body:
+        type: raw
+        content:
+          orderId: "{{ inputs.orderId }}"
+          amount: "{{ inputs.amount }}"

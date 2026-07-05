@@ -1,0 +1,22 @@
+name: "Parameterized — create orders across currencies"
+level: e2e
+environment: local
+tags: [payments]
+covers: REQ-PAYMENTS-PG-001
+plugins:
+  - { name: payments, version: "1.0.0" }
+flow:
+  - type: send
+    agent: payments.create_order
+    inputs:
+      amount: "{{ outline.amount }}"
+      currency: "{{ outline.currency }}"
+      userId: "{{ outline.userId }}"
+  - type: validate
+    agent: payments.validate_created
+    inputs:
+      response: "{{ ledger.payments.create_order.http.response }}"
+examples:
+  - { name: standard-order, amount: 100,  currency: USD, userId: user-1, tags: [smoke] }
+  - { name: large-order,    amount: 9999, currency: GBP, userId: user-2, tags: [edge] }
+  - { name: euro-order,     amount: 250,  currency: EUR, userId: user-3 }

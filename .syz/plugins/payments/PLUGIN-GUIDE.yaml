@@ -1,0 +1,79 @@
+# PLUGIN-GUIDE.yaml — payments integration knowledge (L2)
+#
+# What THIS integration does, in domain language. Requirement ids are
+# REQ-PAYMENTS-PG-<NNN>. Scenarios link here with `covers:`; `syz rtm` reports coverage.
+
+summary: >
+  Creates payment orders, settles them asynchronously, and refunds them. Refunds require
+  an authenticated caller.
+
+requirements:
+  - id: REQ-PAYMENTS-PG-001
+    summary: Create an order
+    behaviour:
+      given: a positive amount, a supported currency, and a user id
+      when:  an order is created
+      then:  the order is stored and a unique order id is returned
+    inputs:
+      - { field: amount,   type: integer, min: 1, max: 1000000, required: true }
+      - { field: currency, type: string,  values: [USD, EUR, GBP], required: true }
+      - { field: userId,   type: string,  required: true }
+    outputs:
+      - { field: orderId, type: string, example: ord_1001 }
+    rules:
+      - amount must be an integer between 1 and 1,000,000
+      - currency must be one of USD, EUR, GBP
+    notes: >
+      The create endpoint is the entry point for the whole payment lifecycle. A newly created
+      order starts in the 'created' state and returns HTTP 201.
+
+  - id: REQ-PAYMENTS-PG-002
+    summary: Reject invalid orders
+    behaviour:
+      given: a request that violates a field constraint
+      when:  an order is created
+      then:  the request is rejected with an error and no order is stored
+    rules:
+      - a non-positive or out-of-range amount is rejected
+      - an unsupported currency is rejected
+    errors:
+      - { code: HTTP_400, meaning: the request failed validation }
+    notes: >
+      Validation is total — a bad order never reaches storage and never returns an order id.
+
+  - id: REQ-PAYMENTS-PG-003
+    summary: Fetch and list orders
+    behaviour:
+      given: one or more stored orders
+      when:  an order is fetched by id, or the list is filtered by status
+      then:  the matching order(s) are returned
+    notes: >
+      Fetch-by-id returns the order envelope; list returns the matching orders and a count.
+
+  - id: REQ-PAYMENTS-PG-004
+    summary: Settle an order asynchronously
+    behaviour:
+      given: a created order
+      when:  settlement is requested
+      then:  the order moves to 'settling' immediately and to 'settled' a short time later
+    lifecycle:
+      states: [created, settling, settled]
+      transitions:
+        - created -> settling
+        - settling -> settled
+    notes: >
+      Settlement is eventually consistent — the 'settled' state becomes true some unknown time
+      after the request. Tests must poll for it rather than assume it is immediate.
+
+  - id: REQ-PAYMENTS-PG-005
+    summary: Refund an order (authenticated)
+    behaviour:
+      given: a valid bearer token and an order id
+      when:  a refund is requested
+      then:  a refund reference is returned
+    rules:
+      - a refund without a valid bearer token is rejected as unauthorized
+    errors:
+      - { code: HTTP_401, meaning: the caller presented no or an invalid bearer token }
+    notes: >
+      Refunds are the one protected operation; identity is supplied by a shared connection handle.

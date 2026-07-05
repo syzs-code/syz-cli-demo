@@ -1,0 +1,21 @@
+name: local
+
+# Per-plugin location config, referenced by agents as {{ env.<plugin>.base_url }}.
+payments:
+  base_url: "http://127.0.0.1:3000"
+notifications:
+  base_url: "http://127.0.0.1:3000"
+
+# Named connection handle — one place for shared identity (base URL + credentials).
+# A step opts in with `connection: payments_api`. The bearer token is pulled from the
+# PAYMENTS_TOKEN process env var and is masked everywhere in reports and the ledger.
+connections:
+  payments_api:
+    execution_library: http
+    lifecycle: ephemeral
+    http:
+      request:
+        fields:
+          base_url: "http://127.0.0.1:3000"
+        headers:
+          Authorization: "Bearer {{ os-env-var:PAYMENTS_TOKEN }}"

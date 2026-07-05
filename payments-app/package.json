@@ -1,0 +1,17 @@
+{
+  "name": "payments-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tiny HTTP payments service — the System Under Test for the SYZYGY CLI demo.",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

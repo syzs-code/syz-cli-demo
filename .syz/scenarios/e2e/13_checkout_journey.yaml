@@ -1,0 +1,30 @@
+name: "Checkout journey — settle then notify (cross-integration)"
+level: e2e
+environment: local
+tags: [journey]
+covers: [REQ-CHECKOUT-DOM-001, REQ-NOTIFICATIONS-PG-001]
+plugins:
+  - { name: payments, version: "1.0.0" }
+  - { name: notifications, version: "1.0.0" }
+flow:
+  - type: send
+    agent: payments.create_order
+    inputs: { amount: 750, currency: USD, userId: user-11 }
+    set:
+      order_id: "{{ ledger.payments.create_order.http.response.fields.body.orderId }}"
+  - type: send
+    agent: payments.settle_order
+    inputs: {}
+  # Only proceed to notify once settlement has actually converged.
+  - type: workflow
+    agent: payments.check_settled
+    poll:
+      max_attempts: 10
+      interval_ms: 1000
+  - type: send
+    agent: notifications.send_notification
+    inputs: { orderId: "{{ ctx.var.order_id }}", channel: email }
+  - type: validate
+    agent: notifications.validate_sent
+    inputs:
+      response: "{{ ledger.notifications.send_notification.http.response }}"

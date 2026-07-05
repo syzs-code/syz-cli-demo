@@ -1,0 +1,22 @@
+name: "Poll — wait until settlement converges"
+level: e2e
+environment: local
+tags: [poll]
+covers: REQ-PAYMENTS-PG-004
+plugins:
+  - { name: payments, version: "1.0.0" }
+flow:
+  - type: send
+    agent: payments.create_order
+    inputs: { amount: 300, currency: USD, userId: user-4 }
+    set:
+      order_id: "{{ ledger.payments.create_order.http.response.fields.body.orderId }}"
+  - type: send
+    agent: payments.settle_order
+    inputs: {}
+  # Re-run the status check until it reports 'settled' (early-exit) or the bound trips.
+  - type: workflow
+    agent: payments.check_settled
+    poll:
+      max_attempts: 10
+      interval_ms: 1000

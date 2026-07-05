@@ -1,0 +1,19 @@
+name: notifications.validate_sent
+type: validate
+description: "Notification accepted — HTTP 201 and status 'sent'"
+checks:
+  - type: http
+    description: "HTTP status is 201"
+    path: "$.fields.status_code"
+    operator: equals
+    value: 201
+  - type: json
+    description: "status equals 'sent'"
+    path: "$.fields.body.status"
+    operator: equals
+    value: sent
+  - type: json
+    description: "notificationId is namespaced"
+    path: "$.fields.body.notificationId"
+    operator: contains
+    value: "ntf_"

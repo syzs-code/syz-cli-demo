@@ -1,0 +1,13 @@
+name: payments.validate_rejected
+type: validate
+description: "Request rejected — HTTP 400 with an error message"
+checks:
+  - type: http
+    description: "HTTP status is 400"
+    path: "$.fields.status_code"
+    operator: equals
+    value: 400
+  - type: json
+    description: "error field is present"
+    path: "$.fields.body.error"
+    operator: exists

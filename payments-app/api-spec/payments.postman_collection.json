@@ -1,0 +1,100 @@
+{
+  "info": {
+    "name": "Payments App",
+    "description": "Canonical Postman collection for the payments-app demo service. Used to drive `syz generate plugin --from postman:`. Set the `base_url` and `token` collection variables.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://127.0.0.1:3000" },
+    { "key": "token", "value": "demo-secret-token" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{base_url}}/health", "host": ["{{base_url}}"], "path": ["health"] }
+      }
+    },
+    {
+      "name": "Create Order",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount\": 100,\n  \"currency\": \"USD\",\n  \"userId\": \"user-1\"\n}"
+        },
+        "url": { "raw": "{{base_url}}/orders", "host": ["{{base_url}}"], "path": ["orders"] }
+      }
+    },
+    {
+      "name": "List Orders",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/orders?status=created",
+          "host": ["{{base_url}}"],
+          "path": ["orders"],
+          "query": [{ "key": "status", "value": "created" }]
+        }
+      }
+    },
+    {
+      "name": "Get Order",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/orders/:id",
+          "host": ["{{base_url}}"],
+          "path": ["orders", ":id"],
+          "variable": [{ "key": "id", "value": "ord_1001" }]
+        }
+      }
+    },
+    {
+      "name": "Settle Order",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/orders/:id/settle",
+          "host": ["{{base_url}}"],
+          "path": ["orders", ":id", "settle"],
+          "variable": [{ "key": "id", "value": "ord_1001" }]
+        }
+      }
+    },
+    {
+      "name": "Get Order Status",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/orders/:id/status",
+          "host": ["{{base_url}}"],
+          "path": ["orders", ":id", "status"],
+          "variable": [{ "key": "id", "value": "ord_1001" }]
+        }
+      }
+    },
+    {
+      "name": "Create Refund",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"orderId\": \"ord_1001\",\n  \"amount\": 100\n}"
+        },
+        "url": { "raw": "{{base_url}}/refunds", "host": ["{{base_url}}"], "path": ["refunds"] }
+      }
+    }
+  ]
+}

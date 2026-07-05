@@ -1,0 +1,15 @@
+name: "Negative — reject a zero amount"
+level: e2e
+environment: local
+tags: [smoke, negative]
+covers: REQ-PAYMENTS-PG-002
+plugins:
+  - { name: payments, version: "1.0.0" }
+flow:
+  - type: send
+    agent: payments.create_order
+    inputs: { amount: 0, currency: USD, userId: user-1 }
+  - type: validate
+    agent: payments.validate_rejected
+    inputs:
+      response: "{{ ledger.payments.create_order.http.response }}"

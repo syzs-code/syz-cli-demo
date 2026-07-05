@@ -1,0 +1,22 @@
+name: "Context variable — capture an id, thread it into a path"
+level: e2e
+environment: local
+tags: [payments]
+covers: REQ-PAYMENTS-PG-003
+plugins:
+  - { name: payments, version: "1.0.0" }
+flow:
+  # Capture the new order id into a scenario-scoped context variable.
+  - type: send
+    agent: payments.create_order
+    inputs: { amount: 250, currency: EUR, userId: user-9 }
+    set:
+      order_id: "{{ ledger.payments.create_order.http.response.fields.body.orderId }}"
+  # Read it back — get_order's path is /orders/{{ ctx.var.order_id }}.
+  - type: send
+    agent: payments.get_order
+    inputs: {}
+  - type: validate
+    agent: payments.validate_fetched
+    inputs:
+      response: "{{ ledger.payments.get_order.http.response }}"

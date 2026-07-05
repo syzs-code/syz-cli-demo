@@ -1,0 +1,18 @@
+name: "List — filter orders by status via a query parameter"
+level: e2e
+environment: local
+tags: [payments]
+covers: REQ-PAYMENTS-PG-003
+plugins:
+  - { name: payments, version: "1.0.0" }
+flow:
+  - type: send
+    agent: payments.create_order
+    inputs: { amount: 150, currency: USD, userId: user-10 }
+  - type: send
+    agent: payments.list_orders
+    inputs: { status: created }
+  - type: validate
+    agent: payments.validate_listed
+    inputs:
+      response: "{{ ledger.payments.list_orders.http.response }}"

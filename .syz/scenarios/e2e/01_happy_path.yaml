@@ -1,0 +1,15 @@
+name: "Happy path — create an order"
+level: e2e
+environment: local
+tags: [smoke, payments]
+covers: REQ-PAYMENTS-PG-001
+plugins:
+  - { name: payments, version: "1.0.0" }
+flow:
+  - type: send
+    agent: payments.create_order
+    inputs: { amount: 100, currency: USD, userId: user-1 }
+  - type: validate
+    agent: payments.validate_created
+    inputs:
+      response: "{{ ledger.payments.create_order.http.response }}"

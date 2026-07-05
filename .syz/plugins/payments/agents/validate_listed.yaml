@@ -1,0 +1,14 @@
+name: payments.validate_listed
+type: validate
+description: "List returned at least one order"
+checks:
+  - type: http
+    description: "status is 200"
+    path: "$.fields.status_code"
+    operator: equals
+    value: 200
+  - type: json
+    description: "count is greater than zero"
+    path: "$.fields.body.count"
+    operator: greater_than
+    value: 0

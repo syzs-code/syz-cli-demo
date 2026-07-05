@@ -1,0 +1,16 @@
+name: payments.settle_order
+type: send
+execution_library: http
+description: "Kick off asynchronous settlement for an order"
+connection:
+  execution_library: http
+  lifecycle: ephemeral
+  http:
+    request:
+      fields:
+        base_url: "{{ env.payments.base_url }}"
+http:
+  request:
+    fields:
+      method: POST
+      path: /orders/{{ ctx.var.order_id }}/settle

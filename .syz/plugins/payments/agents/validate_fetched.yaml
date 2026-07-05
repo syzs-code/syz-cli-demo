@@ -1,0 +1,13 @@
+name: payments.validate_fetched
+type: validate
+description: "Order fetched — HTTP 200 and the order object is present"
+checks:
+  - type: http
+    description: "HTTP status is 200"
+    path: "$.fields.status_code"
+    operator: equals
+    value: 200
+  - type: json
+    description: "order.orderId is present"
+    path: "$.fields.body.order.orderId"
+    operator: exists

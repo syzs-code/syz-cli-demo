@@ -1,0 +1,15 @@
+name: "Workflow — with a step override"
+level: e2e
+environment: local
+tags: [workflow]
+covers: REQ-PAYMENTS-PG-001
+plugins:
+  - { name: payments, version: "1.0.0" }
+flow:
+  - type: workflow
+    agent: payments.create_and_validate
+    overrides:
+      - step: payments.create_order
+        inputs:
+          amount: 500
+          currency: EUR

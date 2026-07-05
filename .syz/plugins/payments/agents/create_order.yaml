@@ -1,0 +1,24 @@
+name: payments.create_order
+type: send
+execution_library: http
+description: "Create a new payment order"
+outputs:
+  orderId: { path: "$.fields.body.orderId", description: "ID of the created order" }
+connection:
+  execution_library: http
+  lifecycle: ephemeral
+  http:
+    request:
+      fields:
+        base_url: "{{ env.payments.base_url }}"
+http:
+  request:
+    fields:
+      method: POST
+      path: /orders
+      body:
+        type: raw
+        content:
+          amount: "{{ inputs.amount }}"
+          currency: "{{ inputs.currency }}"
+          userId: "{{ inputs.userId }}"

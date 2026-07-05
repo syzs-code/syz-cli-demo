@@ -1,0 +1,16 @@
+name: payments.get_order
+type: send
+execution_library: http
+description: "Fetch a single order by id (path threaded from a context variable)"
+connection:
+  execution_library: http
+  lifecycle: ephemeral
+  http:
+    request:
+      fields:
+        base_url: "{{ env.payments.base_url }}"
+http:
+  request:
+    fields:
+      method: GET
+      path: /orders/{{ ctx.var.order_id }}

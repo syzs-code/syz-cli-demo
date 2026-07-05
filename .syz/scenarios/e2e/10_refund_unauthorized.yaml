@@ -1,0 +1,21 @@
+name: "Refund — rejected without a token"
+level: e2e
+environment: local
+tags: [auth, negative]
+covers: REQ-PAYMENTS-PG-005
+plugins:
+  - { name: payments, version: "1.0.0" }
+flow:
+  - type: send
+    agent: payments.create_order
+    inputs: { amount: 400, currency: USD, userId: user-7 }
+    set:
+      order_id: "{{ ledger.payments.create_order.http.response.fields.body.orderId }}"
+  # No `connection:` here — the bearer token is never attached, so the call is rejected.
+  - type: send
+    agent: payments.refund_order
+    inputs: { orderId: "{{ ctx.var.order_id }}", amount: 400 }
+  - type: validate
+    agent: payments.validate_unauthorized
+    inputs:
+      response: "{{ ledger.payments.refund_order.http.response }}"

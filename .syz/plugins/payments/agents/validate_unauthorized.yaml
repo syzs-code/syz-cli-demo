@@ -1,0 +1,13 @@
+name: payments.validate_unauthorized
+type: validate
+description: "Refund without a bearer token is rejected — HTTP 401"
+checks:
+  - type: http
+    description: "HTTP status is 401"
+    path: "$.fields.status_code"
+    operator: equals
+    value: 401
+  - type: json
+    description: "error field is present"
+    path: "$.fields.body.error"
+    operator: exists

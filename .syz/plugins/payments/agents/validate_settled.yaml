@@ -1,0 +1,14 @@
+name: payments.validate_settled
+type: validate
+description: "Settlement has converged — status is 'settled'"
+checks:
+  - type: http
+    description: "HTTP status is 200"
+    path: "$.fields.status_code"
+    operator: equals
+    value: 200
+  - type: json
+    description: "order status equals 'settled'"
+    path: "$.fields.body.status"
+    operator: equals
+    value: settled

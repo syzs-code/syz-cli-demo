@@ -1,0 +1,21 @@
+name: notifications.send_notification
+type: send
+execution_library: http
+description: "Send a customer notification for an order"
+connection:
+  execution_library: http
+  lifecycle: ephemeral
+  http:
+    request:
+      fields:
+        base_url: "{{ env.notifications.base_url }}"
+http:
+  request:
+    fields:
+      method: POST
+      path: /notifications
+      body:
+        type: raw
+        content:
+          orderId: "{{ inputs.orderId }}"
+          channel: "{{ inputs.channel }}"

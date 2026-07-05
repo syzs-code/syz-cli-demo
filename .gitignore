@@ -1,0 +1,9 @@
+# dependencies
+payments-app/node_modules/
+
+# SYZ run artifacts (regenerated on every run)
+.syz/results/
+.syz/rtm.md
+
+# OS
+.DS_Store

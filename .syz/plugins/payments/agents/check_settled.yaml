@@ -1,0 +1,11 @@
+name: payments.check_settled
+type: workflow
+description: >
+  Read an order's status and assert it has settled. Designed to be driven by a
+  `poll:` block — it re-runs until the validate converges or the bound trips.
+steps:
+  - agent: payments.get_status
+    inputs: {}
+  - agent: payments.validate_settled
+    inputs:
+      response: "{{ ledger.payments.get_status.http.response }}"

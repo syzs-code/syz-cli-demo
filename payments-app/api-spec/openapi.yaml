@@ -1,0 +1,230 @@
+openapi: 3.0.3
+info:
+  title: Payments App
+  version: 1.0.0
+  description: >
+    Tiny in-memory payments service — the System Under Test for the SYZYGY CLI
+    demo. This document is the canonical description of the HTTP surface and is
+    used to drive `syz generate plugin --from openapi:`.
+servers:
+  - url: http://127.0.0.1:3000
+    description: Local demo server
+tags:
+  - name: orders
+  - name: refunds
+  - name: system
+paths:
+  /health:
+    get:
+      tags: [system]
+      operationId: health
+      summary: Liveness probe
+      responses:
+        '200':
+          description: Service is up
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string, example: ok }
+
+  /orders:
+    post:
+      tags: [orders]
+      operationId: createOrder
+      summary: Create a payment order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderRequest'
+      responses:
+        '201':
+          description: Order created
+          headers:
+            Set-Cookie:
+              schema: { type: string }
+              description: Session cookie
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Order' }
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+    get:
+      tags: [orders]
+      operationId: listOrders
+      summary: List orders
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema: { type: string, enum: [created, settling, settled] }
+        - name: ids
+          in: query
+          required: false
+          description: Repeat to filter by multiple order ids
+          schema:
+            type: array
+            items: { type: string }
+      responses:
+        '200':
+          description: Matching orders
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orders:
+                    type: array
+                    items: { $ref: '#/components/schemas/Order' }
+                  count: { type: integer }
+
+  /orders/{id}:
+    get:
+      tags: [orders]
+      operationId: getOrder
+      summary: Fetch one order
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: The order
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  order: { $ref: '#/components/schemas/Order' }
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /orders/{id}/settle:
+    post:
+      tags: [orders]
+      operationId: settleOrder
+      summary: Begin asynchronous settlement
+      description: >
+        Returns immediately with status "settling"; the order flips to "settled"
+        a few seconds later. Models eventual consistency for a polled workflow.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '202':
+          description: Settlement started
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orderId: { type: string }
+                  status: { type: string, example: settling }
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /orders/{id}/status:
+    get:
+      tags: [orders]
+      operationId: getOrderStatus
+      summary: Read settlement status (poll target)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Current status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orderId: { type: string }
+                  status: { type: string, enum: [created, settling, settled] }
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /refunds:
+    post:
+      tags: [refunds]
+      operationId: createRefund
+      summary: Refund an order (requires bearer token)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRefundRequest'
+      responses:
+        '201':
+          description: Refund created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Refund' }
+        '401':
+          description: Missing or invalid bearer token
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    CreateOrderRequest:
+      type: object
+      required: [amount, currency, userId]
+      properties:
+        amount: { type: integer, minimum: 1, maximum: 1000000, example: 100 }
+        currency: { type: string, enum: [USD, EUR, GBP], example: USD }
+        userId: { type: string, example: user-1 }
+    Order:
+      type: object
+      properties:
+        orderId: { type: string, example: ord_1001 }
+        amount: { type: integer, example: 100 }
+        currency: { type: string, example: USD }
+        userId: { type: string, example: user-1 }
+        status: { type: string, enum: [created, settling, settled] }
+        createdAt: { type: string, format: date-time }
+    CreateRefundRequest:
+      type: object
+      required: [orderId, amount]
+      properties:
+        orderId: { type: string, example: ord_1001 }
+        amount: { type: integer, minimum: 1, example: 100 }
+    Refund:
+      type: object
+      properties:
+        refundId: { type: string, example: rfnd_5001 }
+        orderId: { type: string, example: ord_1001 }
+        amount: { type: integer, example: 100 }
+        status: { type: string, example: refunded }
+    Error:
+      type: object
+      properties:
+        error: { type: string }

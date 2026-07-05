@@ -1,0 +1,32 @@
+# DOMAIN.yaml — cross-integration business knowledge (L3)
+#
+# What the business does END TO END, across more than one integration, in domain language.
+# DOM requirement ids are REQ-<AREA>-DOM-<NNN> where <AREA> is a key declared in `areas:`.
+
+areas:
+  - key: CHECKOUT
+    title: Checkout & settlement
+    description: create order → settle → notify the customer
+
+entities:
+  order: { id: order.orderId, links: [refund.orderId, notification.orderId] }
+
+requirements:
+  - id: REQ-CHECKOUT-DOM-001
+    summary: A paid order settles and the customer is notified
+    behaviour:
+      given: a customer has placed a valid order
+      when:  the order is settled
+      then:  [the order reaches the settled state, the customer is notified]
+    flow:
+      - the customer places an order
+      - the order settles asynchronously
+      - once settled, the customer receives a notification
+    rules:
+      - notification happens only after the order has settled
+      - the same order identifier appears on the order and on the notification
+    notes: >
+      This is the end-to-end journey the demo tells: a payment order is created, settlement is
+      eventually consistent (the system reaches 'settled' some time after the request), and only
+      then is the customer notified. It spans the payments and notifications integrations, so it
+      lives here in the workspace dossier rather than in either plugin's guide.

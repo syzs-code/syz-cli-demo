@@ -1,0 +1,16 @@
+name: payments.validate_headers
+type: validate
+description: "Response headers — JSON content type (Set-Cookie is auto-masked in the report)"
+checks:
+  - type: http
+    description: "status is 201"
+    path: "$.fields.status_code"
+    operator: equals
+    value: 201
+  # String operators (contains/matches) require the `json` assertion type; it JSONPaths the
+  # whole response envelope, so it can read $.headers.* too. `http` type is for equality/numeric.
+  - type: json
+    description: "content-type is JSON"
+    path: "$.headers.content-type"
+    operator: contains
+    value: "application/json"
