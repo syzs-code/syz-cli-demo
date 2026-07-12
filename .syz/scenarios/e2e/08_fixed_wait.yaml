@@ -1,6 +1,5 @@
 name: "Fixed wait — pause a known duration (contrast with poll)"
 level: e2e
-environment: local
 tags: [wait]
 covers: REQ-PAYMENTS-PG-004
 plugins:

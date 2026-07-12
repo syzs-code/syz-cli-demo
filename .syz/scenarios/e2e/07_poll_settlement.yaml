@@ -1,6 +1,5 @@
 name: "Poll — wait until settlement converges"
 level: e2e
-environment: local
 tags: [poll]
 covers: REQ-PAYMENTS-PG-004
 plugins:

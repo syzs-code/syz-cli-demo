@@ -1,6 +1,5 @@
 name: "List — filter orders by status via a query parameter"
 level: e2e
-environment: local
 tags: [payments]
 covers: REQ-PAYMENTS-PG-003
 plugins:

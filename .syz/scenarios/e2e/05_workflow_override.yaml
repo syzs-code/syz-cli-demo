@@ -1,6 +1,5 @@
 name: "Workflow — with a step override"
 level: e2e
-environment: local
 tags: [workflow]
 covers: REQ-PAYMENTS-PG-001
 plugins:

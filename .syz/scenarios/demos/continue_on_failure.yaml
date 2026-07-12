@@ -9,7 +9,6 @@
 #   syz run --suite .syz/scenarios/demos/continue_on_failure.yaml --env local --continue-scenario-on-failure
 name: "Demo — continue on failure"
 level: e2e
-environment: local
 tags: [demo]
 plugins:
   - { name: payments, version: "1.0.0" }

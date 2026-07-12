@@ -1,6 +1,5 @@
 name: "Parameterized — create orders across currencies"
 level: e2e
-environment: local
 tags: [payments]
 covers: REQ-PAYMENTS-PG-001
 plugins:

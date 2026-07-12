@@ -1,6 +1,5 @@
 name: "Refund — authenticated via a connection handle"
 level: e2e
-environment: local
 tags: [auth]
 covers: REQ-PAYMENTS-PG-005
 plugins:

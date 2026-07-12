@@ -1,6 +1,5 @@
 name: "Context variable — capture an id, thread it into a path"
 level: e2e
-environment: local
 tags: [payments]
 covers: REQ-PAYMENTS-PG-003
 plugins:

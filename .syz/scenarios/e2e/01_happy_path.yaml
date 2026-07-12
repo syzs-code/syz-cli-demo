@@ -1,6 +1,5 @@
 name: "Happy path — create an order"
 level: e2e
-environment: local
 tags: [smoke, payments]
 covers: REQ-PAYMENTS-PG-001
 plugins:

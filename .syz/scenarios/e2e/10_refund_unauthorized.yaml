@@ -1,6 +1,5 @@
 name: "Refund — rejected without a token"
 level: e2e
-environment: local
 tags: [auth, negative]
 covers: REQ-PAYMENTS-PG-005
 plugins:

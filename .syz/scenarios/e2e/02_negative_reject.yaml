@@ -1,6 +1,5 @@
 name: "Negative — reject a zero amount"
 level: e2e
-environment: local
 tags: [smoke, negative]
 covers: REQ-PAYMENTS-PG-002
 plugins:

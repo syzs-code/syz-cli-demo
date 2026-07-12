@@ -1,6 +1,5 @@
 name: "Workflow — create and validate in one step"
 level: e2e
-environment: local
 tags: [workflow]
 covers: REQ-PAYMENTS-PG-001
 plugins:

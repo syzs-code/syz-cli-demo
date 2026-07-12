@@ -1,6 +1,5 @@
 name: "Headers — assert content type (Set-Cookie is auto-masked)"
 level: e2e
-environment: local
 tags: [smoke]
 covers: REQ-PAYMENTS-PG-001
 plugins:

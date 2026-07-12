@@ -1,6 +1,5 @@
 name: "Checkout journey — settle then notify (cross-integration)"
 level: e2e
-environment: local
 tags: [journey]
 covers: [REQ-CHECKOUT-DOM-001, REQ-NOTIFICATIONS-PG-001]
 plugins:
