@@ -35,7 +35,7 @@ The endpoint surface is described canonically in
 ```bash
 cd syz-cli-demo                                    # the workspace root
 export PAYMENTS_TOKEN=demo-secret-token            # the refund demo + connection handle need this
-syz --version                                      # 0.8.0
+syz --version                                      # the installed version
 ```
 
 > The `payments_api` connection handle reads `PAYMENTS_TOKEN` from the environment (masked
