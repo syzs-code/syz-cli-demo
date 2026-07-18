@@ -6,9 +6,9 @@ plugins:
   - { name: payments, version: "1.0.0" }
 flow:
   - type: workflow
-    agent: payments.create_and_validate
+    procedure: payments.create_and_validate
     overrides:
-      - step: payments.create_order
+      - procedure: payments.create_order
         inputs:
           amount: 500
           currency: EUR

@@ -2,11 +2,11 @@ name: payments.create_and_validate
 type: workflow
 description: "Create an order and validate the response in one reusable step"
 steps:
-  - agent: payments.create_order
+  - procedure: payments.create_order
     inputs:
       amount: 100
       currency: USD
       userId: workflow-user
-  - agent: payments.validate_created
+  - procedure: payments.validate_created
     inputs:
       response: "{{ ledger.payments.create_order.http.response }}"

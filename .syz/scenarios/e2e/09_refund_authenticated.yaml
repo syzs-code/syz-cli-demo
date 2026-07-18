@@ -6,16 +6,16 @@ plugins:
   - { name: payments, version: "1.0.0" }
 flow:
   - type: send
-    agent: payments.create_order
+    procedure: payments.create_order
     inputs: { amount: 400, currency: USD, userId: user-6 }
     set:
       order_id: "{{ ledger.payments.create_order.http.response.fields.body.orderId }}"
   # `connection: payments_api` supplies the bearer token (masked in the report).
   - type: send
-    agent: payments.refund_order
+    procedure: payments.refund_order
     connection: payments_api
     inputs: { orderId: "{{ ctx.var.order_id }}", amount: 400 }
   - type: validate
-    agent: payments.validate_refunded
+    procedure: payments.validate_refunded
     inputs:
       response: "{{ ledger.payments.refund_order.http.response }}"

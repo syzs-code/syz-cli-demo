@@ -6,4 +6,4 @@ plugins:
   - { name: payments, version: "1.0.0" }
 flow:
   - type: workflow
-    agent: payments.create_and_validate
+    procedure: payments.create_and_validate

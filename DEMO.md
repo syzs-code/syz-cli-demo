@@ -4,7 +4,7 @@ A guided, copy-paste tour of **`syz run`** and **`syz generate`** against a tiny
 payments service. Runnable top to bottom by someone who has never seen SYZ.
 
 - **`payments-app/`** — the System Under Test (in-memory HTTP service, driven via the SYZ HTTP executor).
-- **`.syz/`** — the authored SYZ workspace (plugins, agents, scenarios, environment, suite, knowledge layer).
+- **`.syz/`** — the authored SYZ workspace (plugins, procedures, scenarios, environment, suite, knowledge layer).
 
 Run every `syz` command from the **workspace root** (`syz-cli-demo/`).
 
@@ -45,7 +45,7 @@ syz --version                                      # the installed version
 
 ## 1. Sanity — lint the workspace
 
-`syz lint` statically validates every scenario, agent, environment, and the knowledge layer —
+`syz lint` statically validates every scenario, procedure, environment, and the knowledge layer —
 no server needed. This workspace has **two** plugins, so lint takes a `--plugin`:
 
 ```bash
@@ -100,7 +100,7 @@ adding the same flags to `syz lint`.
 
 ### Workflows and overrides
 
-- `04_workflow.yaml` — a reusable `workflow` agent (create → validate) in one step.
+- `04_workflow.yaml` — a reusable `workflow` procedure (create → validate) in one step.
 - `05_workflow_override.yaml` — the same workflow with a scenario-level `overrides:` on the create step.
 
 ### Context variables — capture an id, thread it into a path

@@ -7,15 +7,15 @@ plugins:
 flow:
   # Capture the new order id into a scenario-scoped context variable.
   - type: send
-    agent: payments.create_order
+    procedure: payments.create_order
     inputs: { amount: 250, currency: EUR, userId: user-9 }
     set:
       order_id: "{{ ledger.payments.create_order.http.response.fields.body.orderId }}"
   # Read it back — get_order's path is /orders/{{ ctx.var.order_id }}.
   - type: send
-    agent: payments.get_order
+    procedure: payments.get_order
     inputs: {}
   - type: validate
-    agent: payments.validate_fetched
+    procedure: payments.validate_fetched
     inputs:
       response: "{{ ledger.payments.get_order.http.response }}"

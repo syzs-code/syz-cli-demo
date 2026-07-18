@@ -6,21 +6,21 @@ plugins:
   - { name: payments, version: "1.0.0" }
 flow:
   - type: send
-    agent: payments.create_order
+    procedure: payments.create_order
     inputs: { amount: 300, currency: USD, userId: user-5 }
     set:
       order_id: "{{ ledger.payments.create_order.http.response.fields.body.orderId }}"
   - type: send
-    agent: payments.settle_order
+    procedure: payments.settle_order
     inputs: {}
   # A fixed pause. This is a flakiness smell — prefer poll: (07) for real state waits.
   - type: craft
-    agent: syz.wait
+    procedure: syz.wait
     inputs: { ms: 5000 }
   - type: send
-    agent: payments.get_status
+    procedure: payments.get_status
     inputs: {}
   - type: validate
-    agent: payments.validate_settled
+    procedure: payments.validate_settled
     inputs:
       response: "{{ ledger.payments.get_status.http.response }}"

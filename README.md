@@ -10,7 +10,7 @@ syz-cli-demo/
 └── .syz/                ← the SYZ workspace
     ├── environments/local.yaml     ← base URLs + the `payments_api` connection handle
     ├── plugins/
-    │   ├── payments/               ← 6 send + 8 validate + 2 workflow agents, PLUGIN-GUIDE.yaml
+    │   ├── payments/               ← 6 send + 8 validate + 2 workflow procedures, PLUGIN-GUIDE.yaml
     │   └── notifications/          ← a second integration (for the cross-service journey)
     ├── scenarios/
     │   ├── e2e/                    ← 13 green scenarios (the smoke suite)

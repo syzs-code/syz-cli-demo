@@ -6,13 +6,13 @@ plugins:
   - { name: payments, version: "1.0.0" }
 flow:
   - type: send
-    agent: payments.create_order
+    procedure: payments.create_order
     inputs:
       amount: "{{ outline.amount }}"
       currency: "{{ outline.currency }}"
       userId: "{{ outline.userId }}"
   - type: validate
-    agent: payments.validate_created
+    procedure: payments.validate_created
     inputs:
       response: "{{ ledger.payments.create_order.http.response }}"
 examples:

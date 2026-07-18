@@ -14,13 +14,13 @@ plugins:
   - { name: payments, version: "1.0.0" }
 flow:
   - type: send
-    agent: payments.create_order
+    procedure: payments.create_order
     inputs: { amount: 100, currency: USD, userId: user-1 }
   - type: validate
-    agent: payments.validate_fetched          # asserts HTTP 200 — but create returns 201, so this FAILS
+    procedure: payments.validate_fetched          # asserts HTTP 200 — but create returns 201, so this FAILS
     inputs:
       response: "{{ ledger.payments.create_order.http.response }}"
   - type: validate
-    agent: payments.validate_created          # this one passes — only reached with the flag
+    procedure: payments.validate_created          # this one passes — only reached with the flag
     inputs:
       response: "{{ ledger.payments.create_order.http.response }}"

@@ -1,6 +1,6 @@
 name: local
 
-# Per-plugin location config, referenced by agents as {{ env.<plugin>.base_url }}.
+# Per-plugin location config, referenced by procedures as {{ env.<plugin>.base_url }}.
 payments:
   base_url: "http://127.0.0.1:3000"
 notifications:
