@@ -1,4 +1,4 @@
-<!-- syz-version: 0.10.5 -->
+<!-- syz-version: 0.10.6 -->
 # SYZYGY
 
 This workspace is a SYZYGY test suite. Start at `dossier/SYZ-INDEX.md` — the router that points you to the right doc. **Before authoring or editing a scenario, you MUST read `dossier/SYZ-TESTING.md`, `dossier/DOMAIN.yaml`, `dossier/TEST-STRATEGY.md`, and the relevant plugin's `PLUGIN-GUIDE.yaml`.** For commands, formats, and resolver syntax see `dossier/SYZ-MANUAL.md`; for design guidance see `dossier/SYZ-GUIDELINES.md`. **Never invent capability** — if syz lacks an operator, flag, field, or syntax a test needs, stop and state what's missing and why instead of fabricating it (see `dossier/SYZ-NOTICE.md`). **Not sure what the user needs, or the request is in plain language?** Read `dossier/SYZ-PLAYBOOK.md` — intent triage plus step-by-step activity playbooks — and ask the user rather than guess; look for knowledge only inside `.syz/` unless the user points you elsewhere. **Migrating existing tests?** Only then, read `dossier/SYZ-MIGRATE.md` first — it steers migrating existing tests into syz without loss; never use it to author net-new tests.
