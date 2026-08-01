@@ -7,3 +7,18 @@ payments-app/node_modules/
 
 # OS
 .DS_Store
+.syz/plugins.installed/
+.syz/rtm.json
+.syz/dossier/SYZ-*.md
+.syz/AGENTS.md
+.syz/GEMINI.md
+.syz/CONVENTIONS.md
+.syz/.cursor/
+.syz/.windsurf/
+.syz/.continue/
+.syz/.amazonq/
+.syz/.aiassistant/
+.syz/.github/copilot-instructions.md
+.syz/CLAUDE.md
+.syz/scenarios/CLAUDE.md
+.syz/plugins/*/CLAUDE.md

@@ -65,7 +65,8 @@ syz run --suite .syz/suites/smoke.suite.yaml --env local
 ```
 
 Open the HTML report it prints at the end (`.syz/results/<run>/index.html`) — per-scenario,
-per-step, with input resolution, the constructed request, assertions, and the ledger.
+per-step, showing each step's request/response exchange and its assertions, with the full
+trace and ledger one click away in the linked `debug.log` and `ledger.json`.
 
 ---
 
