@@ -1,14 +1,8 @@
 name: local
-
-# Per-plugin location config, referenced by procedures as {{ env.<plugin>.base_url }}.
 payments:
-  base_url: "http://127.0.0.1:3000"
+  base_url: http://127.0.0.1:3000
 notifications:
-  base_url: "http://127.0.0.1:3000"
-
-# Named connection handle — one place for shared identity (base URL + credentials).
-# A step opts in with `connection: payments_api`. The bearer token is pulled from the
-# PAYMENTS_TOKEN process env var and is masked everywhere in reports and the ledger.
+  base_url: http://127.0.0.1:3000
 connections:
   payments_api:
     execution_library: http
@@ -16,6 +10,28 @@ connections:
     http:
       request:
         fields:
-          base_url: "http://127.0.0.1:3000"
+          base_url: http://127.0.0.1:3000
         headers:
-          Authorization: "Bearer {{ os-env-var:PAYMENTS_TOKEN }}"
+          Authorization: Bearer {{ os-env-var:PAYMENTS_TOKEN }}
+payments2:
+  send_health:
+    base_url: http://127.0.0.1:3000
+    auth_token: '{{ os-env-var:PAYMENTS2_AUTH_TOKEN }}'
+  send_list_orders:
+    base_url: http://127.0.0.1:3000
+    auth_token: '{{ os-env-var:PAYMENTS2_AUTH_TOKEN }}'
+  send_create_order:
+    base_url: http://127.0.0.1:3000
+    auth_token: '{{ os-env-var:PAYMENTS2_AUTH_TOKEN }}'
+  send_get_order:
+    base_url: http://127.0.0.1:3000
+    auth_token: '{{ os-env-var:PAYMENTS2_AUTH_TOKEN }}'
+  send_settle_order:
+    base_url: http://127.0.0.1:3000
+    auth_token: '{{ os-env-var:PAYMENTS2_AUTH_TOKEN }}'
+  send_get_order_status:
+    base_url: http://127.0.0.1:3000
+    auth_token: '{{ os-env-var:PAYMENTS2_AUTH_TOKEN }}'
+  send_create_refund:
+    base_url: http://127.0.0.1:3000
+    auth_token: '{{ os-env-var:PAYMENTS2_AUTH_TOKEN }}'

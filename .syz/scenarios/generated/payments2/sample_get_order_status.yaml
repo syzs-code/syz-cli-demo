@@ -1,0 +1,15 @@
+name: Sample get_order_status scenario
+level: e2e
+plugins:
+  - name: payments2
+    version: 1.0.0
+tags: [sample, smoke]
+flow:
+  - type: send
+    procedure: payments2.send_get_order_status
+    inputs: {}
+  - type: validate
+    procedure: payments2.validate_get_order_status
+    inputs:
+      response: '{{ ledger.payments2.send_get_order_status.http.response }}'
+      expected_status: 200

@@ -1,2 +1,3 @@
 plugin: notifications
 version: 1.0.0
+syz_format: 1
