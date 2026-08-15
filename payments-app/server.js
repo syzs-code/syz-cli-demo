@@ -103,16 +103,27 @@ app.get('/orders/:id', (req, res) => {
 // ── POST /orders/:id/settle — kick off async settlement ──────────────────────
 // Returns immediately with status "settling"; flips to "settled" after a delay.
 // This models eventual consistency — the target of a SYZ `poll:` workflow.
+//
+// SETTLE_DELAY_MS=0 means settle SYNCHRONOUSLY, before this response is sent.
+// It used to still go through setTimeout, which Node clamps to ~1ms — and a
+// localhost round-trip beats 1ms, so the first poll attempt could still observe
+// "settling" and log a failed attempt. "No delay" now genuinely means no delay,
+// which makes runs at 0 deterministic. Any positive value keeps the original
+// asynchronous behaviour, so the default 3500ms demo is unchanged.
 app.post('/orders/:id/settle', (req, res) => {
   const order = orders.get(req.params.id);
   if (!order) return res.status(404).json({ error: `order ${req.params.id} not found` });
 
   if (order.status === 'created') {
-    order.status = 'settling';
-    setTimeout(() => {
-      const o = orders.get(order.orderId);
-      if (o && o.status === 'settling') o.status = 'settled';
-    }, SETTLE_DELAY_MS);
+    if (SETTLE_DELAY_MS <= 0) {
+      order.status = 'settled';
+    } else {
+      order.status = 'settling';
+      setTimeout(() => {
+        const o = orders.get(order.orderId);
+        if (o && o.status === 'settling') o.status = 'settled';
+      }, SETTLE_DELAY_MS);
+    }
   }
   res.status(202).json({ orderId: order.orderId, status: order.status });
 });
