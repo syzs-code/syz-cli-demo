@@ -13,25 +13,3 @@ connections:
           base_url: http://127.0.0.1:3000
         headers:
           Authorization: Bearer {{ os-env-var:PAYMENTS_TOKEN }}
-payments2:
-  send_health:
-    base_url: http://127.0.0.1:3000
-    auth_token: '{{ os-env-var:PAYMENTS2_AUTH_TOKEN }}'
-  send_list_orders:
-    base_url: http://127.0.0.1:3000
-    auth_token: '{{ os-env-var:PAYMENTS2_AUTH_TOKEN }}'
-  send_create_order:
-    base_url: http://127.0.0.1:3000
-    auth_token: '{{ os-env-var:PAYMENTS2_AUTH_TOKEN }}'
-  send_get_order:
-    base_url: http://127.0.0.1:3000
-    auth_token: '{{ os-env-var:PAYMENTS2_AUTH_TOKEN }}'
-  send_settle_order:
-    base_url: http://127.0.0.1:3000
-    auth_token: '{{ os-env-var:PAYMENTS2_AUTH_TOKEN }}'
-  send_get_order_status:
-    base_url: http://127.0.0.1:3000
-    auth_token: '{{ os-env-var:PAYMENTS2_AUTH_TOKEN }}'
-  send_create_refund:
-    base_url: http://127.0.0.1:3000
-    auth_token: '{{ os-env-var:PAYMENTS2_AUTH_TOKEN }}'
