@@ -1,5 +1,5 @@
 {
-  "syz_version": "0.11.0",
+  "syz_version": "0.12.0",
   "syz_format": 1,
   "plugins": []
 }
